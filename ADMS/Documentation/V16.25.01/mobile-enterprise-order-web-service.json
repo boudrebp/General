@@ -1,0 +1,2057 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "v1",
+        "title": "Mobile Enterprise Order Web Service",
+        "description": "Mobile Enterprise Order Web Service hosted by the MobileEnterpriseSimulatorApp.",
+        "contact": {
+            "name": "GE",
+            "url": "https://editor.swagger.io",
+            "email": ""
+        }
+    },
+    "host": "localhost:8447",
+    "basePath": "/api/ext/MobileEnterprise/v1",
+    "schemes": ["http"],
+    "paths": {
+        "/orders/{id}/assignments": {
+            "post": {
+                "tags": ["OrderAssignments"],
+                "operationId": "OrderAssignments_CreateOrderAssignments",
+                "consumes": ["application/json", "application/xml", "text/json", "text/html"],
+                "produces": ["application/json", "text/json", "text/html"],
+                "parameters": [{
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }, {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/OrderAssignment"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "tags": ["OrderAssignments"],
+                "operationId": "OrderAssignments_UpdateOrderAssignments",
+                "consumes": ["application/json", "application/xml", "text/json", "text/html"],
+                "produces": ["application/json", "text/json", "text/html"],
+                "parameters": [{
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }, {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/OrderAssignment"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
+        "/orders/{id}/forms": {
+            "get": {
+                "tags": ["OrderForms"],
+                "operationId": "OrderForms_GetOrderForms",
+                "consumes": [],
+                "produces": ["application/json", "text/json", "text/html"],
+                "parameters": [{
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }, {
+                        "name": "formType",
+                        "in": "query",
+                        "required": true,
+                        "type": "string"
+                    }, {
+                        "name": "customFormType",
+                        "in": "query",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
+        "/orders/{id}/names": {
+            "put": {
+                "tags": ["OrderNames"],
+                "operationId": "OrderNames_UpdateOrderNames",
+                "consumes": ["application/json", "application/xml", "text/json", "text/html"],
+                "produces": ["application/json", "text/json", "text/html"],
+                "parameters": [{
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }, {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Name"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
+        "/orders": {
+            "post": {
+                "tags": ["Orders"],
+                "operationId": "Orders_CreateOrder",
+                "consumes": ["application/json", "text/json", "text/html"],
+                "produces": ["application/json", "text/json", "text/html"],
+                "parameters": [{
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Order"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
+        "/orders/{id}/outage": {
+            "post": {
+                "tags": ["Outage"],
+                "operationId": "Outage_CreateOutage",
+                "consumes": ["application/json", "application/xml", "text/json", "text/html"],
+                "produces": ["application/json", "text/json", "text/html"],
+                "parameters": [{
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }, {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Outage"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "tags": ["Outage"],
+                "operationId": "Outage_UpdateOutage",
+                "consumes": ["application/json", "application/xml", "text/json", "text/html"],
+                "produces": ["application/json", "text/json", "text/html"],
+                "parameters": [{
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }, {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/OutageUpdate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
+        "/orders/{id}/outage/order/tasks": {
+            "post": {
+                "tags": ["Outage"],
+                "operationId": "Outage_CreateTask",
+                "consumes": ["application/json", "application/xml", "text/json", "text/html"],
+                "produces": ["application/json", "text/json", "text/html"],
+                "parameters": [{
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }, {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Task"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
+        "/orders/{id}/outage/order/tasks/{taskId}": {
+            "put": {
+                "tags": ["Outage"],
+                "operationId": "Outage_UpdateTask",
+                "consumes": ["application/json", "application/xml", "text/json", "text/html"],
+                "produces": ["application/json", "text/json", "text/html"],
+                "parameters": [{
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }, {
+                        "name": "taskId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }, {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Task"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
+        "/messages": {
+            "get": {
+                "tags": ["OutboundMessages"],
+                "operationId": "OutboundMessages_GetOutboundMessages",
+                "consumes": [],
+                "produces": ["application/json", "text/json", "text/html"],
+                "parameters": [{
+                        "name": "from",
+                        "in": "query",
+                        "required": true,
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": ["OutboundMessages"],
+                "operationId": "OutboundMessages_UpdateMessagesStatus",
+                "consumes": ["application/json", "application/xml", "text/json", "text/html"],
+                "produces": ["application/json", "text/json", "text/html"],
+                "parameters": [{
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/OutboundMessageStatusUpdate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
+        "/OutboundMessages": {
+            "get": {
+                "tags": ["OutboundMessages"],
+                "operationId": "OutboundMessages_GetOutboundMessagesFromQueue",
+                "consumes": [],
+                "produces": ["application/json", "application/xml", "text/json", "text/html"],
+                "parameters": [{
+                        "name": "from",
+                        "in": "query",
+                        "required": true,
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/OutboundMessage"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/orders/{id}/switching": {
+            "post": {
+                "tags": ["Switching"],
+                "operationId": "Switching_CreateSwitchingOrderAndSteps",
+                "consumes": ["application/json", "text/json", "text/html"],
+                "produces": ["application/json", "text/json", "text/html"],
+                "parameters": [{
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }, {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Switching"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
+        "/orders/{id}/switching/steps": {
+            "post": {
+                "tags": ["Switching"],
+                "operationId": "Switching_InsertSwitchingSteps",
+                "consumes": ["application/json", "application/xml", "text/json", "text/html"],
+                "produces": ["application/json", "text/json", "text/html"],
+                "parameters": [{
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }, {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/InsertSteps"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "tags": ["Switching"],
+                "operationId": "Switching_UpdateSwitchingSteps",
+                "consumes": ["application/json", "application/xml", "text/json", "text/html"],
+                "produces": ["application/json", "text/json", "text/html"],
+                "parameters": [{
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }, {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ModifySteps"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
+        "/orders/{id}/switching/order": {
+            "patch": {
+                "tags": ["Switching"],
+                "operationId": "Switching_UpdateSwitchingOrder",
+                "consumes": ["application/json", "application/xml", "text/json", "text/html"],
+                "produces": ["application/json", "text/json", "text/html"],
+                "parameters": [{
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }, {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/SwitchingOrder"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "OrderAssignment": {
+            "required": ["crewId", "status"],
+            "type": "object",
+            "properties": {
+                "crewId": {
+                    "type": "string"
+                },
+                "leadCrew": {
+                    "type": "boolean"
+                },
+                "status": {
+                    "enum": ["assign-requested", "unassign-requested", "dispatch-requested", "takeback-requested"],
+                    "type": "string"
+                }
+            }
+        },
+        "Name": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "nameType": {
+                    "type": "string"
+                },
+                "nameTypeAuthority": {
+                    "type": "string"
+                }
+            }
+        },
+        "Order": {
+            "required": ["id"],
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "orderType": {
+                    "enum": ["PO", "TO", "NO"],
+                    "type": "string"
+                },
+                "names": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Name"
+                    }
+                },
+                "geoLocation": {
+                    "$ref": "#/definitions/GeoLocation"
+                },
+                "switching": {
+                    "$ref": "#/definitions/Switching"
+                },
+                "outage": {
+                    "$ref": "#/definitions/Outage"
+                }
+            }
+        },
+        "GeoLocation": {
+            "type": "object",
+            "properties": {
+                "projectionType": {
+                    "type": "string"
+                },
+                "x": {
+                    "format": "double",
+                    "type": "number"
+                },
+                "y": {
+                    "format": "double",
+                    "type": "number"
+                },
+                "zone": {
+                    "format": "int32",
+                    "type": "integer"
+                }
+            }
+        },
+        "Switching": {
+            "type": "object",
+            "properties": {
+                "order": {
+                    "$ref": "#/definitions/SwitchingOrder"
+                },
+                "plannedRequest": {
+                    "$ref": "#/definitions/PlannedRequest"
+                },
+                "steps": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/SwitchingStep"
+                    }
+                }
+            }
+        },
+        "Outage": {
+            "type": "object",
+            "properties": {
+                "order": {
+                    "$ref": "#/definitions/OutageOrder"
+                },
+                "incident": {
+                    "$ref": "#/definitions/Incident"
+                },
+                "outageStatus": {
+                    "enum": ["confirmed", "predicted", "partially-restored", "restored", "closed"],
+                    "type": "string"
+                },
+                "statusTime": {
+                    "format": "date-time",
+                    "type": "string"
+                },
+                "geoLocation": {
+                    "$ref": "#/definitions/GeoLocation"
+                },
+                "deviceId": {
+                    "type": "string"
+                },
+                "deviceType": {
+                    "type": "string"
+                },
+                "deviceName": {
+                    "type": "string"
+                },
+                "phase": {
+                    "enum": ["ABC", "AB", "BC", "AC", "A", "B", "C", "None"],
+                    "type": "string"
+                },
+                "etr": {
+                    "format": "date-time",
+                    "type": "string"
+                },
+                "etrConfidence": {
+                    "enum": ["low", "medium", "high"],
+                    "type": "string"
+                },
+                "etrComment": {
+                    "type": "string"
+                }
+            }
+        },
+        "SwitchingOrder": {
+            "type": "object",
+            "properties": {
+                "switchOrderNumber": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "workRequestId": {
+                    "type": "string"
+                },
+                "workOrderNumber": {
+                    "type": "string"
+                },
+                "referenceNumber": {
+                    "type": "string"
+                },
+                "stationName": {
+                    "type": "string"
+                },
+                "deviceName": {
+                    "type": "string"
+                },
+                "feederName": {
+                    "type": "string"
+                },
+                "divisionId": {
+                    "type": "string"
+                },
+                "operatingCentreId": {
+                    "type": "string"
+                },
+                "version": {
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "isPlanned": {
+                    "type": "boolean"
+                },
+                "status": {
+                    "enum": ["APPROVED", "EXECUTING", "COMPLETED"],
+                    "type": "string"
+                },
+                "scheduledStartTime": {
+                    "format": "date-time",
+                    "type": "string"
+                },
+                "scheduledEndTime": {
+                    "format": "date-time",
+                    "type": "string"
+                },
+                "actualStartTime": {
+                    "format": "date-time",
+                    "type": "string"
+                },
+                "actualEndTime": {
+                    "format": "date-time",
+                    "type": "string"
+                },
+                "createdTime": {
+                    "format": "date-time",
+                    "type": "string"
+                },
+                "lastModifiedTime": {
+                    "format": "date-time",
+                    "type": "string"
+                },
+                "preparedBy": {
+                    "type": "string"
+                },
+                "validatedBy": {
+                    "type": "string"
+                },
+                "validatedTime": {
+                    "format": "date-time",
+                    "type": "string"
+                },
+                "approvedBy1": {
+                    "type": "string"
+                },
+                "approvedBy2": {
+                    "type": "string"
+                },
+                "approvedBy3": {
+                    "type": "string"
+                },
+                "approvedTime1": {
+                    "format": "date-time",
+                    "type": "string"
+                },
+                "approvedTime2": {
+                    "format": "date-time",
+                    "type": "string"
+                },
+                "approvedTime3": {
+                    "format": "date-time",
+                    "type": "string"
+                },
+                "approvedTo": {
+                    "type": "string"
+                },
+                "executedBy": {
+                    "type": "string"
+                },
+                "completedBy": {
+                    "type": "string"
+                },
+                "executedTime": {
+                    "format": "date-time",
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "searchKeyWord": {
+                    "type": "string"
+                },
+                "lastModifiedByUser": {
+                    "type": "string"
+                },
+                "customFields": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/CustomField"
+                    }
+                },
+                "isolatingDevicesDetails": {
+                    "type": "string"
+                },
+                "temporaryGroundsDetails": {
+                    "type": "string"
+                }
+            }
+        },
+        "PlannedRequest": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "geoLocation": {
+                    "$ref": "#/definitions/GeoLocation"
+                },
+                "workRequestId": {
+                    "type": "string"
+                },
+                "locationAddress": {
+                    "type": "string"
+                },
+                "workType": {
+                    "type": "string"
+                },
+                "requestType": {
+                    "type": "string"
+                },
+                "stationName": {
+                    "type": "string"
+                },
+                "deviceName": {
+                    "type": "string"
+                },
+                "feederName": {
+                    "type": "string"
+                },
+                "divisionId": {
+                    "type": "string"
+                },
+                "operatingCenterId": {
+                    "type": "string"
+                },
+                "status": {
+                    "enum": ["EDIT", "ON REVIEW", "APPROVED", "EXECUTING", "COMPLETED"],
+                    "type": "string"
+                },
+                "priority": {
+                    "type": "string"
+                },
+                "urgent": {
+                    "type": "boolean"
+                },
+                "reasonForUrgency": {
+                    "type": "string"
+                },
+                "scheduleStartTime": {
+                    "format": "date-time",
+                    "type": "string"
+                },
+                "scheduleEndTime": {
+                    "format": "date-time",
+                    "type": "string"
+                },
+                "reasonForWork": {
+                    "type": "string"
+                },
+                "customers": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/PlannedRequestCustomer"
+                    }
+                }
+            }
+        },
+        "SwitchingStep": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "switchingType": {
+                    "enum": ["switching-order", "outage-order", "NullEnum"],
+                    "type": "string"
+                },
+                "tagType": {
+                    "type": "string"
+                },
+                "blockNextStep": {
+                    "type": "boolean"
+                },
+                "geoLocation": {
+                    "$ref": "#/definitions/GeoLocation"
+                },
+                "stepNumber": {
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "displayId": {
+                    "type": "string"
+                },
+                "deviceId": {
+                    "type": "string"
+                },
+                "deviceName": {
+                    "type": "string"
+                },
+                "deviceTypeName": {
+                    "type": "string"
+                },
+                "phases": {
+                    "enum": ["ABC", "AB", "BC", "AC", "A", "B", "C", "None"],
+                    "type": "string"
+                },
+                "feeder": {
+                    "type": "string"
+                },
+                "deviceStationName": {
+                    "type": "string"
+                },
+                "serviceCenter": {
+                    "type": "string"
+                },
+                "deviceSubType": {
+                    "type": "string"
+                },
+                "deviceState": {
+                    "type": "string"
+                },
+                "stepAction": {
+                    "type": "string"
+                },
+                "stepInstruction": {
+                    "type": "string"
+                },
+                "comment": {
+                    "type": "string"
+                },
+                "issuedBy": {
+                    "type": "string"
+                },
+                "issuedTo": {
+                    "type": "string"
+                },
+                "issuedToId": {
+                    "type": "string"
+                },
+                "issuedTime": {
+                    "format": "date-time",
+                    "type": "string"
+                },
+                "recordedBy": {
+                    "type": "string"
+                },
+                "completedTime": {
+                    "format": "date-time",
+                    "type": "string"
+                },
+                "actualTime": {
+                    "format": "date-time",
+                    "type": "string"
+                },
+                "affectedCustomers": {
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "restoredCustomers": {
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "customFields": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/CustomField"
+                    }
+                },
+                "mode": {
+                    "enum": ["EDIT", "ISSUED", "COMPLETED", "CANCELLED"],
+                    "type": "string"
+                },
+                "site": {
+                    "type": "string"
+                },
+                "safetyInstruction": {
+                    "type": "string"
+                },
+                "cancelledTime": {
+                    "format": "date-time",
+                    "type": "string"
+                },
+                "isTele": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "OutageOrder": {
+            "type": "object",
+            "properties": {
+                "tasks": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Task"
+                    }
+                },
+                "orderId": {
+                    "type": "string"
+                },
+                "orderName": {
+                    "type": "string"
+                },
+                "orderType": {
+                    "enum": ["restoration", "investigation", "maintenance", "manualSwitching", "plannedSwitching"],
+                    "type": "string"
+                },
+                "orderStatus": {
+                    "enum": ["new", "inProgress", "suspended", "fieldComplete", "closed", "cancelled"],
+                    "type": "string"
+                },
+                "owner": {
+                    "type": "string"
+                },
+                "organization": {
+                    "type": "string"
+                },
+                "county": {
+                    "type": "string"
+                },
+                "powerStatus": {
+                    "type": "string"
+                },
+                "pons": {
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "etrSource": {
+                    "type": "string"
+                },
+                "itr": {
+                    "format": "date-time",
+                    "type": "string"
+                },
+                "crewEta": {
+                    "format": "date-time",
+                    "type": "string"
+                },
+                "earliestArrivingCrews": {
+                    "type": "string"
+                },
+                "evaluatorCrew": {
+                    "type": "string"
+                },
+                "createdTime": {
+                    "format": "date-time",
+                    "type": "string"
+                },
+                "completedTime": {
+                    "format": "date-time",
+                    "type": "string"
+                },
+                "closedTime": {
+                    "format": "date-time",
+                    "type": "string"
+                },
+                "cancellationTime": {
+                    "format": "date-time",
+                    "type": "string"
+                },
+                "dispatcherComments": {
+                    "type": "string"
+                },
+                "crewComments": {
+                    "type": "string"
+                },
+                "remarks": {
+                    "type": "string"
+                },
+                "wireDownCalls": {
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "polesDownCalls": {
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "servicesDownCalls": {
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "highPriorityCalls": {
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "extremePriorityCalls": {
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "incidentPriorityIndex": {
+                    "type": "string"
+                },
+                "pingStatus": {
+                    "type": "string"
+                },
+                "suspended": {
+                    "format": "date-time",
+                    "type": "string"
+                },
+                "suspendedReason": {
+                    "type": "string"
+                },
+                "priority": {
+                    "enum": ["none", "low", "medium", "high", "extreme"],
+                    "type": "string"
+                },
+                "caseNote": {
+                    "type": "string"
+                },
+                "instructions": {
+                    "type": "string"
+                },
+                "currentAffectedCustomers": {
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "initialAffectedCustomer": {
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "duration": {
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "comment": {
+                    "type": "string"
+                },
+                "devicePosition": {
+                    "type": "string"
+                },
+                "voltage": {
+                    "format": "float",
+                    "type": "number"
+                },
+                "city": {
+                    "type": "string"
+                },
+                "locationDescription": {
+                    "type": "string"
+                },
+                "organizationType": {
+                    "type": "string"
+                },
+                "structureName": {
+                    "type": "string"
+                },
+                "structureType": {
+                    "type": "string"
+                },
+                "callType": {
+                    "type": "string"
+                },
+                "firstCallTime": {
+                    "format": "date-time",
+                    "type": "string"
+                },
+                "firstCallerName": {
+                    "type": "string"
+                },
+                "firstCallerAddress": {
+                    "type": "string"
+                },
+                "deviceAddress": {
+                    "type": "string"
+                },
+                "structureNo": {
+                    "type": "string"
+                },
+                "meterNo": {
+                    "type": "string"
+                },
+                "customerRemarks": {
+                    "type": "string"
+                }
+            }
+        },
+        "Incident": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "geoLocation": {
+                    "$ref": "#/definitions/GeoLocation"
+                },
+                "incidentName": {
+                    "type": "string"
+                },
+                "incidentType": {
+                    "enum": ["SingleCustomer", "Momentary", "Predicted", "Confirmed", "Isolated", "ManuallyConfirmed", "Planned", "NonOutage"],
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "workingStatus": {
+                    "enum": ["unassigned", "sentToWFM", "pendingAssigned", "assigned", "enRoute", "onSite", "cancel", "complete", "pendingClear", "patrolled", "evaluating", "evaluated", "restored", "cleared", "maxValue"],
+                    "type": "string"
+                },
+                "feeder": {
+                    "type": "string"
+                },
+                "station": {
+                    "type": "string"
+                },
+                "serviceCenter": {
+                    "type": "string"
+                },
+                "reason": {
+                    "type": "string"
+                },
+                "comment": {
+                    "type": "string"
+                },
+                "openDeviceId": {
+                    "type": "string"
+                },
+                "openDeviceName": {
+                    "type": "string"
+                },
+                "openDeviceType": {
+                    "type": "string"
+                },
+                "phaseOut": {
+                    "enum": ["ABC", "AB", "BC", "AC", "A", "B", "C", "None"],
+                    "type": "string"
+                },
+                "startTime": {
+                    "format": "date-time",
+                    "type": "string"
+                },
+                "endTime": {
+                    "format": "date-time",
+                    "type": "string"
+                },
+                "createdTime": {
+                    "format": "date-time",
+                    "type": "string"
+                },
+                "acknowledgedTime": {
+                    "format": "date-time",
+                    "type": "string"
+                },
+                "fieldCompletionTime": {
+                    "format": "date-time",
+                    "type": "string"
+                },
+                "closureTime": {
+                    "format": "date-time",
+                    "type": "string"
+                },
+                "cancellationTime": {
+                    "format": "date-time",
+                    "type": "string"
+                },
+                "currentCustomers": {
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "criticalCustomers": {
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "callCount": {
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "amiCount": {
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "priorityCalls": {
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "crewComment": {
+                    "type": "string"
+                },
+                "totalAffectedCustomerCount": {
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "isDeviceOfRecordOpen": {
+                    "type": "boolean"
+                },
+                "workOrderId": {
+                    "type": "string"
+                },
+                "openDevicePhaseInd": {
+                    "type": "boolean"
+                },
+                "aor": {
+                    "type": "string"
+                },
+                "failedEquipment": {
+                    "type": "string"
+                },
+                "outageType": {
+                    "type": "string"
+                },
+                "material": {
+                    "type": "string"
+                },
+                "suppressNotification": {
+                    "type": "boolean"
+                },
+                "suppressReason": {
+                    "type": "string"
+                },
+                "openSwitchType": {
+                    "type": "string"
+                },
+                "isSingleCustomer": {
+                    "type": "boolean"
+                },
+                "isNonOutage": {
+                    "type": "boolean"
+                },
+                "serviceCenterName": {
+                    "type": "string"
+                },
+                "lineCrewNeeded": {
+                    "type": "boolean"
+                },
+                "treeCrewNeeded": {
+                    "type": "boolean"
+                },
+                "firstResponderNeeded": {
+                    "type": "boolean"
+                },
+                "evaluatorNeeded": {
+                    "type": "boolean"
+                },
+                "noOfPolesDown": {
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "noOfCrossArms": {
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "noOfTreeTrimSpans": {
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "noOfTransformers": {
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "noConductorSpans": {
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "noServicesDown": {
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "distributionLocationNumber": {
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "pointOfFailure": {
+                    "type": "string"
+                },
+                "orgLevel1To8": {
+                    "type": "string"
+                },
+                "nonOutageType": {
+                    "type": "string"
+                },
+                "midpointSwitching": {
+                    "type": "boolean"
+                },
+                "inaccessible": {
+                    "type": "boolean"
+                },
+                "weather": {
+                    "type": "string"
+                },
+                "isPredictedStable": {
+                    "type": "boolean"
+                },
+                "originalDeviceId": {
+                    "type": "boolean"
+                },
+                "originalDeviceName": {
+                    "type": "string"
+                },
+                "cmi": {
+                    "format": "float",
+                    "type": "number"
+                },
+                "priority": {
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "selfDefinedStatus": {
+                    "type": "string"
+                },
+                "etrSequenceNumber": {
+                    "type": "string"
+                },
+                "areaNoteEtr": {
+                    "format": "date-time",
+                    "type": "string"
+                },
+                "caseNote": {
+                    "type": "string"
+                },
+                "deviceLocation": {
+                    "type": "string"
+                },
+                "companyId": {
+                    "type": "string"
+                },
+                "critCust": {
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "critCust2": {
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "critCust3": {
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "critCust4": {
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "critCust5": {
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "customerList": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Customer"
+                    }
+                },
+                "deviceStatus": {
+                    "type": "string"
+                },
+                "devSize": {
+                    "type": "string"
+                },
+                "drivingDirections": {
+                    "type": "string"
+                },
+                "isAssisted": {
+                    "type": "boolean"
+                },
+                "isNonSpecified": {
+                    "type": "boolean"
+                },
+                "isScada": {
+                    "type": "boolean"
+                },
+                "predCust": {
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "ranking": {
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "subArea": {
+                    "type": "string"
+                },
+                "reasonGroup": {
+                    "type": "string"
+                },
+                "restorationTime": {
+                    "type": "string"
+                },
+                "hazardousCustomer": {
+                    "type": "boolean"
+                },
+                "hasAnUpstreamReclosingDisabledDevice": {
+                    "type": "boolean"
+                },
+                "plannedOutageId": {
+                    "type": "string"
+                },
+                "callBack": {
+                    "enum": ["No", "Manual", "Automatic"],
+                    "type": "string"
+                },
+                "followUpRequired": {
+                    "type": "boolean"
+                },
+                "faultLocation": {
+                    "$ref": "#/definitions/GeoLocation"
+                },
+                "faultLocationSource": {
+                    "type": "string"
+                },
+                "systemAffected": {
+                    "type": "string"
+                },
+                "cause": {
+                    "type": "string"
+                },
+                "subCause": {
+                    "type": "string"
+                },
+                "systemMode": {
+                    "type": "string"
+                },
+                "repairTime": {
+                    "format": "date-time",
+                    "type": "string"
+                },
+                "evaluateCrews": {
+                    "type": "string"
+                },
+                "assessedPolesDown": {
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "assessedConductorSpans": {
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "assessedTransformers": {
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "assessedServices": {
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "customFields": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/CustomField"
+                    }
+                }
+            }
+        },
+        "CustomField": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "string"
+                }
+            }
+        },
+        "PlannedRequestCustomer": {
+            "type": "object",
+            "properties": {
+                "customerId": {
+                    "type": "string"
+                },
+                "geoLocation": {
+                    "$ref": "#/definitions/GeoLocation"
+                },
+                "customerName": {
+                    "type": "string"
+                },
+                "address": {
+                    "type": "string"
+                },
+                "phoneNumber": {
+                    "type": "string"
+                },
+                "servicePoint": {
+                    "type": "string"
+                },
+                "isCritical": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "Task": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "geoLocation": {
+                    "$ref": "#/definitions/GeoLocation"
+                },
+                "taskType": {
+                    "enum": ["assessment", "maintenance", "makeSafe", "checkPrediction", "repair", "open", "close"],
+                    "type": "string"
+                },
+                "createdTime": {
+                    "type": "string"
+                },
+                "lastUpdatedTime": {
+                    "type": "string"
+                },
+                "status": {
+                    "enum": ["new", "inProgress", "complete", "cancelled"],
+                    "type": "string"
+                },
+                "deviceId": {
+                    "type": "string"
+                },
+                "deviceType": {
+                    "type": "string"
+                },
+                "station": {
+                    "type": "string"
+                },
+                "phases": {
+                    "enum": ["ABC", "AB", "BC", "AC", "A", "B", "C", "None"],
+                    "type": "string"
+                },
+                "locationDescription": {
+                    "type": "string"
+                },
+                "crewId": {
+                    "type": "string"
+                },
+                "crewName": {
+                    "type": "string"
+                },
+                "dispatcherComments": {
+                    "type": "string"
+                },
+                "crewComments": {
+                    "type": "string"
+                },
+                "result": {
+                    "type": "string"
+                },
+                "completionTime": {
+                    "type": "string"
+                }
+            }
+        },
+        "Customer": {
+            "required": ["customerId", "name"],
+            "type": "object",
+            "properties": {
+                "customerId": {
+                    "type": "string"
+                },
+                "createdTime": {
+                    "format": "date-time",
+                    "type": "string"
+                },
+                "lastUpdated": {
+                    "format": "date-time",
+                    "type": "string"
+                },
+                "geoLocation": {
+                    "$ref": "#/definitions/GeoLocation"
+                },
+                "address": {
+                    "type": "string"
+                },
+                "callId": {
+                    "type": "string"
+                },
+                "callType": {
+                    "type": "string"
+                },
+                "city": {
+                    "type": "string"
+                },
+                "isCritical": {
+                    "type": "boolean"
+                },
+                "critical": {
+                    "type": "string"
+                },
+                "critical1": {
+                    "type": "string"
+                },
+                "critical2": {
+                    "type": "string"
+                },
+                "critical3": {
+                    "type": "string"
+                },
+                "critical4": {
+                    "type": "string"
+                },
+                "critical5": {
+                    "type": "string"
+                },
+                "hazardousCondition": {
+                    "type": "string"
+                },
+                "meterNumber": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "phoneNumber": {
+                    "type": "string"
+                },
+                "phoneCall": {
+                    "type": "boolean"
+                },
+                "priority": {
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "remarks": {
+                    "type": "string"
+                },
+                "state": {
+                    "type": "string"
+                },
+                "switchName": {
+                    "type": "string"
+                },
+                "tfName": {
+                    "type": "string"
+                },
+                "troubleCode": {
+                    "type": "string"
+                },
+                "wantsCallBack": {
+                    "type": "boolean"
+                },
+                "callBackName": {
+                    "type": "string"
+                },
+                "callBackNumber": {
+                    "type": "string"
+                },
+                "zipCode": {
+                    "type": "string"
+                },
+                "accountNumber": {
+                    "type": "string"
+                },
+                "drivingDirections": {
+                    "type": "string"
+                },
+                "confOut": {
+                    "type": "string"
+                },
+                "pingStatus": {
+                    "type": "string"
+                },
+                "conditions": {
+                    "type": "string"
+                },
+                "callTime": {
+                    "format": "date-time",
+                    "type": "string"
+                }
+            }
+        },
+        "OutageUpdate": {
+            "type": "object",
+            "properties": {
+                "order": {
+                    "$ref": "#/definitions/OutageOrderProperties"
+                },
+                "incident": {
+                    "$ref": "#/definitions/Incident"
+                },
+                "outageStatus": {
+                    "enum": ["confirmed", "predicted", "partially-restored", "restored", "closed"],
+                    "type": "string"
+                },
+                "statusTime": {
+                    "format": "date-time",
+                    "type": "string"
+                },
+                "geoLocation": {
+                    "$ref": "#/definitions/GeoLocation"
+                },
+                "deviceId": {
+                    "type": "string"
+                },
+                "deviceType": {
+                    "type": "string"
+                },
+                "deviceName": {
+                    "type": "string"
+                },
+                "phase": {
+                    "enum": ["ABC", "AB", "BC", "AC", "A", "B", "C", "None"],
+                    "type": "string"
+                },
+                "etr": {
+                    "format": "date-time",
+                    "type": "string"
+                },
+                "etrConfidence": {
+                    "enum": ["low", "medium", "high"],
+                    "type": "string"
+                },
+                "etrComment": {
+                    "type": "string"
+                }
+            }
+        },
+        "OutageOrderProperties": {
+            "type": "object",
+            "properties": {
+                "orderId": {
+                    "type": "string"
+                },
+                "orderName": {
+                    "type": "string"
+                },
+                "orderType": {
+                    "enum": ["restoration", "investigation", "maintenance", "manualSwitching", "plannedSwitching"],
+                    "type": "string"
+                },
+                "orderStatus": {
+                    "enum": ["new", "inProgress", "suspended", "fieldComplete", "closed", "cancelled"],
+                    "type": "string"
+                },
+                "owner": {
+                    "type": "string"
+                },
+                "organization": {
+                    "type": "string"
+                },
+                "county": {
+                    "type": "string"
+                },
+                "powerStatus": {
+                    "type": "string"
+                },
+                "pons": {
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "etrSource": {
+                    "type": "string"
+                },
+                "itr": {
+                    "format": "date-time",
+                    "type": "string"
+                },
+                "crewEta": {
+                    "format": "date-time",
+                    "type": "string"
+                },
+                "earliestArrivingCrews": {
+                    "type": "string"
+                },
+                "evaluatorCrew": {
+                    "type": "string"
+                },
+                "createdTime": {
+                    "format": "date-time",
+                    "type": "string"
+                },
+                "completedTime": {
+                    "format": "date-time",
+                    "type": "string"
+                },
+                "closedTime": {
+                    "format": "date-time",
+                    "type": "string"
+                },
+                "cancellationTime": {
+                    "format": "date-time",
+                    "type": "string"
+                },
+                "dispatcherComments": {
+                    "type": "string"
+                },
+                "crewComments": {
+                    "type": "string"
+                },
+                "remarks": {
+                    "type": "string"
+                },
+                "wireDownCalls": {
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "polesDownCalls": {
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "servicesDownCalls": {
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "highPriorityCalls": {
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "extremePriorityCalls": {
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "incidentPriorityIndex": {
+                    "type": "string"
+                },
+                "pingStatus": {
+                    "type": "string"
+                },
+                "suspended": {
+                    "format": "date-time",
+                    "type": "string"
+                },
+                "suspendedReason": {
+                    "type": "string"
+                },
+                "priority": {
+                    "enum": ["none", "low", "medium", "high", "extreme"],
+                    "type": "string"
+                },
+                "caseNote": {
+                    "type": "string"
+                },
+                "instructions": {
+                    "type": "string"
+                },
+                "currentAffectedCustomers": {
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "initialAffectedCustomer": {
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "duration": {
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "comment": {
+                    "type": "string"
+                },
+                "devicePosition": {
+                    "type": "string"
+                },
+                "voltage": {
+                    "format": "float",
+                    "type": "number"
+                },
+                "city": {
+                    "type": "string"
+                },
+                "locationDescription": {
+                    "type": "string"
+                },
+                "organizationType": {
+                    "type": "string"
+                },
+                "structureName": {
+                    "type": "string"
+                },
+                "structureType": {
+                    "type": "string"
+                },
+                "callType": {
+                    "type": "string"
+                },
+                "firstCallTime": {
+                    "format": "date-time",
+                    "type": "string"
+                },
+                "firstCallerName": {
+                    "type": "string"
+                },
+                "firstCallerAddress": {
+                    "type": "string"
+                },
+                "deviceAddress": {
+                    "type": "string"
+                },
+                "structureNo": {
+                    "type": "string"
+                },
+                "meterNo": {
+                    "type": "string"
+                },
+                "customerRemarks": {
+                    "type": "string"
+                }
+            }
+        },
+        "OutboundMessageStatusUpdate": {
+            "type": "object",
+            "properties": {
+                "messageId": {
+                    "format": "uuid",
+                    "type": "string",
+                    "example": "00000000-0000-0000-0000-000000000000"
+                },
+                "status": {
+                    "enum": ["success", "retry", "failed"],
+                    "type": "string"
+                },
+                "reason": {
+                    "type": "string"
+                }
+            }
+        },
+        "OutboundMessage": {
+            "type": "object",
+            "properties": {
+                "header": {
+                    "$ref": "#/definitions/OutboundMessageHeader"
+                },
+                "body": {
+                    "$ref": "#/definitions/OutboundMessageBody"
+                }
+            }
+        },
+        "OutboundMessageHeader": {
+            "type": "object",
+            "properties": {
+                "messageId": {
+                    "format": "uuid",
+                    "type": "string",
+                    "example": "00000000-0000-0000-0000-000000000000"
+                },
+                "messageType": {
+                    "enum": ["NotifyOrderAssignmentStatus", "NotifySwitchingStepStatus", "NotifySwitchingAction", "NotifyCrewStatus", "NotifyCrewLocation", "NotifyOutageStatus", "NotifyTaskStatus", "NotifyUrgentWork", "NotifyLogAction", "RequestCreateOrderFromField"],
+                    "type": "string"
+                },
+                "messageTime": {
+                    "format": "date-time",
+                    "type": "string"
+                }
+            }
+        },
+        "OutboundMessageBody": {
+            "type": "object",
+            "properties": {}
+        },
+        "InsertSteps": {
+            "required": ["steps"],
+            "type": "object",
+            "properties": {
+                "steps": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/SwitchingStep"
+                    }
+                },
+                "renumberStep": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/RenumberStep"
+                    }
+                }
+            }
+        },
+        "RenumberStep": {
+            "type": "object",
+            "properties": {
+                "stepId": {
+                    "type": "string"
+                },
+                "oldPosition": {
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "newPosition": {
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "displayId": {
+                    "type": "string"
+                }
+            }
+        },
+        "ModifySteps": {
+            "type": "object",
+            "properties": {
+                "steps": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/SwitchingStep"
+                    }
+                },
+                "renumberSteps": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/RenumberStep"
+                    }
+                },
+                "deleteSteps": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    }
+}
+ 
