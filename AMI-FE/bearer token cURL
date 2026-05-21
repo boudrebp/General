@@ -1,0 +1,6 @@
+curl --location 'https://zitadel.systest2-gridmssceapps.gcsnt.gnscet.com/oauth/v2/token' \
+--header 'Content-Type: application/x-www-form-urlencoded' \
+--data-urlencode 'client_id= {{clientID}}' \
+--data-urlencode 'client_secret= {{clientSecret}}' \
+--data-urlencode 'scope=openid profile email urn:zitadel:iam:org:project:id:{{projectID}}:aud' \
+--data-urlencode 'grant_type=client_credentials'

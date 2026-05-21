@@ -1,0 +1,28 @@
+{
+    "s:Envelope": {
+        "s:Body": {
+            "ExceptionsArrived": {
+                "input": {
+                    "MeterExceptionCollection": {
+                        "MeterException": [
+                            {
+                                "ElectronicSerialNumber": "{{meter_id}}",
+                                "ReceivedWhen": "{{$isoTimestamp}}",
+                                "ExceptionCategory": "PowerOutageOrRestoration",
+                                "Name": "Primary Power Down",
+                                "ID": "18001",
+                                "Arguments": {
+                                    "a:Argument": {
+                                        "a:Name": "OutageId",
+                                        "a:Value": "54"
+                                    }
+                                },
+                                "Timestamp": "{{$isoTimestamp}}"
+                            }
+                        ]
+                    }
+                }
+            }
+        }
+    }
+}

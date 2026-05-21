@@ -1,0 +1,4 @@
+# Format: meter_id,timestamp,name[,outage_id]
+1234567890,2026-05-18T10:00:00Z,Primary Power Down,54
+1234567890,2026-05-18T10:05:00Z,Primary Power Up,54
+9988776655,now,Primary Power Down,75

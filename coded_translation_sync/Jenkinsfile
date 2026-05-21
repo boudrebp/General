@@ -1,0 +1,97 @@
+pipeline {
+  agent any
+
+  parameters {
+    string(name: 'REPO_URL', defaultValue: 'https://github.com/boudrebp/General.git', description: 'GitHub repository URL')
+    string(name: 'REPO_BRANCH', defaultValue: 'main', description: 'Git branch to monitor')
+    string(name: 'TARGET_FILE', defaultValue: 'coded_translation_sync/CodedTranslationConfigSample.xml', description: 'Path to source XML file within repo')
+    booleanParam(name: 'ENABLE_SECONDARY_DB', defaultValue: false, description: 'Enable writes to secondary Oracle DB using DB2 credentials')
+  }
+
+  triggers {
+    pollSCM('H/15 * * * *')
+  }
+
+  options {
+    disableConcurrentBuilds()
+    timestamps()
+  }
+
+  environment {
+    TARGET_FILE = "${params.TARGET_FILE}"
+    SYNC_SCRIPT = 'coded_translation_sync/scripts/sync_coded_translation.py'
+    PY_REQUIREMENTS = 'coded_translation_sync/requirements.txt'
+  }
+
+  stages {
+    stage('Checkout') {
+      steps {
+        checkout([
+          $class: 'GitSCM',
+          branches: [[name: "*/${params.REPO_BRANCH}"]],
+          doGenerateSubmoduleConfigurations: false,
+          extensions: [],
+          submoduleCfg: [],
+          userRemoteConfigs: [[
+            url: params.REPO_URL,
+            credentialsId: 'git_token'
+          ]]
+        ])
+      }
+    }
+
+    stage('Install Python Dependencies') {
+      steps {
+        sh 'python3 -m pip install --user -r "$PY_REQUIREMENTS"'
+      }
+    }
+
+    stage('Upsert To Oracle') {
+      steps {
+        script {
+          def creds = [
+            usernamePassword(
+              credentialsId: 'oracle-db-user-pass',
+              usernameVariable: 'ORACLE_DB_USER',
+              passwordVariable: 'ORACLE_DB_PASSWORD'
+            ),
+            string(credentialsId: 'oracle-db-dsn', variable: 'ORACLE_DB_DSN')
+          ]
+
+          if (params.ENABLE_SECONDARY_DB) {
+            creds += [
+              usernamePassword(
+                credentialsId: 'oracle-db2-user-pass',
+                usernameVariable: 'ORACLE_DB2_USER',
+                passwordVariable: 'ORACLE_DB2_PASSWORD'
+              ),
+              string(credentialsId: 'oracle-db2-dsn', variable: 'ORACLE_DB2_DSN')
+            ]
+          }
+
+          withCredentials(creds) {
+            sh '''#!/usr/bin/env bash
+              set -euo pipefail
+              python3 "$SYNC_SCRIPT" \
+                --xml-file "$TARGET_FILE" \
+                --create-table-if-missing \
+                --since-commit "${GIT_PREVIOUS_SUCCESSFUL_COMMIT:-}" \
+                --current-commit "${GIT_COMMIT:-}" \
+                --repo-dir . \
+                --source-commit "${GIT_COMMIT:-}"
+            '''
+          }
+        }
+      }
+    }
+  }
+
+  post {
+    success {
+      echo 'Pipeline completed successfully.'
+    }
+    failure {
+      echo 'Pipeline failed. Check logs for details.'
+    }
+  }
+}
