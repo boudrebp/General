@@ -22,7 +22,7 @@ Create these credentials in Jenkins:
 Optional secondary DB credentials (when `ENABLE_SECONDARY_DB=true`):
 
 - `gmssi_user2` (same global username with password credential)
-- `oracle-db2-dsn` (Secret text) with value like `host:1521/service_name`
+- `oracle-db2-dsn` (Secret text) with value `IRVXVS1ETOR01:1521/eta_b`
 
 ## Jenkins Parameters
 
