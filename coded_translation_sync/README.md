@@ -17,7 +17,7 @@ Create these credentials in Jenkins:
 
 - `git_token` (for repository checkout)
 - `gmssi_user2` (Global username with password for DB access)
-- `oracle-db-dsn` (Secret text) with value like `host:1521/service_name`
+- `oracle-db-dsn` (Secret text) with value `ALHXVS1ETOR01:1521/eta`
 
 Optional secondary DB credentials (when `ENABLE_SECONDARY_DB=true`):
 
@@ -56,7 +56,7 @@ Key columns:
 python3 -m pip install -r coded_translation_sync/requirements.txt
 export ORACLE_DB_USER='your_user'
 export ORACLE_DB_PASSWORD='your_password'
-export ORACLE_DB_DSN='host:1521/service_name'
+export ORACLE_DB_DSN='ALHXVS1ETOR01:1521/eta'
 
 python3 coded_translation_sync/scripts/sync_coded_translation.py \
   --xml-file coded_translation_sync/CodedTranslationConfigSample.xml \
