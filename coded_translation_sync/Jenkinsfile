@@ -51,7 +51,7 @@ pipeline {
         script {
           def creds = [
             usernamePassword(
-              credentialsId: 'oracle-db-user-pass',
+              credentialsId: 'gmssi_user2',
               usernameVariable: 'ORACLE_DB_USER',
               passwordVariable: 'ORACLE_DB_PASSWORD'
             ),
@@ -61,7 +61,7 @@ pipeline {
           if (params.ENABLE_SECONDARY_DB) {
             creds += [
               usernamePassword(
-                credentialsId: 'oracle-db2-user-pass',
+                credentialsId: 'gmssi_user2',
                 usernameVariable: 'ORACLE_DB2_USER',
                 passwordVariable: 'ORACLE_DB2_PASSWORD'
               ),

@@ -16,12 +16,12 @@ This folder contains a Jenkins + Python flow to monitor `CodedTranslationConfigS
 Create these credentials in Jenkins:
 
 - `git_token` (for repository checkout)
-- `oracle-db-user-pass` (Username with password)
+- `gmssi_user2` (Global username with password for DB access)
 - `oracle-db-dsn` (Secret text) with value like `host:1521/service_name`
 
 Optional secondary DB credentials (when `ENABLE_SECONDARY_DB=true`):
 
-- `oracle-db2-user-pass` (Username with password)
+- `gmssi_user2` (same global username with password credential)
 - `oracle-db2-dsn` (Secret text) with value like `host:1521/service_name`
 
 ## Jenkins Parameters
