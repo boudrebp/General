@@ -17,12 +17,10 @@ Create these credentials in Jenkins:
 
 - `git_token` (for repository checkout)
 - `gmssi_user2` (Global username with password for DB access)
-- `oracle-db-dsn` (Secret text) with value `ALHXVS1ETOR01:1521/eta`
 
 Optional secondary DB credentials (when `ENABLE_SECONDARY_DB=true`):
 
 - `gmssi_user2` (same global username with password credential)
-- `oracle-db2-dsn` (Secret text) with value `IRVXVS1ETOR01:1521/eta_b`
 
 ## Jenkins Parameters
 
@@ -32,6 +30,8 @@ The included `Jenkinsfile` supports these parameters:
 - `REPO_BRANCH` (default `main`)
 - `TARGET_FILE` (default `coded_translation_sync/CodedTranslationConfigSample.xml`)
 - `ENABLE_SECONDARY_DB` (default `false`)
+- `PRIMARY_DB_DSN` (default `ALHXVS1ETOR01:1521/eta`)
+- `SECONDARY_DB_DSN` (default `IRVXVS1ETOR01:1521/eta_b`)
 
 
 ## DB Table

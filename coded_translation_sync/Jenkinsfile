@@ -6,6 +6,8 @@ pipeline {
     string(name: 'REPO_BRANCH', defaultValue: 'main', description: 'Git branch to monitor')
     string(name: 'TARGET_FILE', defaultValue: 'coded_translation_sync/CodedTranslationConfigSample.xml', description: 'Path to source XML file within repo')
     booleanParam(name: 'ENABLE_SECONDARY_DB', defaultValue: false, description: 'Enable writes to secondary Oracle DB using DB2 credentials')
+    string(name: 'PRIMARY_DB_DSN', defaultValue: 'ALHXVS1ETOR01:1521/eta', description: 'Primary Oracle DSN host:port/service')
+    string(name: 'SECONDARY_DB_DSN', defaultValue: 'IRVXVS1ETOR01:1521/eta_b', description: 'Secondary Oracle DSN host:port/service')
   }
 
   triggers {
@@ -54,9 +56,9 @@ pipeline {
               credentialsId: 'gmssi_user2',
               usernameVariable: 'ORACLE_DB_USER',
               passwordVariable: 'ORACLE_DB_PASSWORD'
-            ),
-            string(credentialsId: 'oracle-db-dsn', variable: 'ORACLE_DB_DSN')
+            )
           ]
+          def dsnEnv = ["ORACLE_DB_DSN=${params.PRIMARY_DB_DSN}"]
 
           if (params.ENABLE_SECONDARY_DB) {
             creds += [
@@ -64,22 +66,24 @@ pipeline {
                 credentialsId: 'gmssi_user2',
                 usernameVariable: 'ORACLE_DB2_USER',
                 passwordVariable: 'ORACLE_DB2_PASSWORD'
-              ),
-              string(credentialsId: 'oracle-db2-dsn', variable: 'ORACLE_DB2_DSN')
+              )
             ]
+            dsnEnv += ["ORACLE_DB2_DSN=${params.SECONDARY_DB_DSN}"]
           }
 
           withCredentials(creds) {
-            sh '''#!/usr/bin/env bash
-              set -euo pipefail
-              python3 "$SYNC_SCRIPT" \
-                --xml-file "$TARGET_FILE" \
-                --create-table-if-missing \
-                --since-commit "${GIT_PREVIOUS_SUCCESSFUL_COMMIT:-}" \
-                --current-commit "${GIT_COMMIT:-}" \
-                --repo-dir . \
-                --source-commit "${GIT_COMMIT:-}"
-            '''
+            withEnv(dsnEnv) {
+              sh '''#!/usr/bin/env bash
+                set -euo pipefail
+                python3 "$SYNC_SCRIPT" \
+                  --xml-file "$TARGET_FILE" \
+                  --create-table-if-missing \
+                  --since-commit "${GIT_PREVIOUS_SUCCESSFUL_COMMIT:-}" \
+                  --current-commit "${GIT_COMMIT:-}" \
+                  --repo-dir . \
+                  --source-commit "${GIT_COMMIT:-}"
+              '''
+            }
           }
         }
       }
