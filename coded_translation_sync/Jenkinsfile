@@ -112,7 +112,7 @@ python3 -c 'import sys, textwrap; exec(textwrap.dedent(sys.stdin.read()))' <<'PY
 
 
       def validate_table_name(table_name):
-        pattern = r"^[A-Za-z][A-Za-z0-9_$#]*(\.[A-Za-z][A-Za-z0-9_$#]*)?$"
+        pattern = r"^[A-Za-z][A-Za-z0-9_$#]*([.][A-Za-z][A-Za-z0-9_$#]*)?$"
         if not re.fullmatch(pattern, table_name):
           raise ValueError(
             "Invalid table name. Use unquoted Oracle identifiers, optionally schema-qualified."
