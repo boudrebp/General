@@ -2,9 +2,9 @@ pipeline {
   agent any
 
   parameters {
-    string(name: 'REPO_URL', defaultValue: 'https://github.com/boudrebp/General.git', description: 'GitHub repository URL')
-    string(name: 'REPO_BRANCH', defaultValue: 'main', description: 'Git branch to monitor')
-    string(name: 'TARGET_FILE', defaultValue: 'coded_translation_sync/CodedTranslationConfigSample.xml', description: 'Path to source XML file within repo')
+    string(name: 'REPO_URL', defaultValue: 'https://github.gnscet.com/sce-grid/GridMS-adms-dev', description: 'GitHub repository URL')
+    string(name: 'REPO_BRANCH', defaultValue: 'master', description: 'Git branch to monitor')
+    string(name: 'TARGET_FILE', defaultValue: 'sce/config/shared/CodedTranslationConfig.xml', description: 'Path to source XML file within repo')
     booleanParam(name: 'ENABLE_SECONDARY_DB', defaultValue: false, description: 'Enable writes to secondary Oracle DB using DB2 credentials')
   }
 
@@ -19,8 +19,8 @@ pipeline {
 
   environment {
     TARGET_FILE = "${params.TARGET_FILE}"
-    SYNC_SCRIPT = 'coded_translation_sync/scripts/sync_coded_translation.py'
     PY_REQUIREMENTS = 'coded_translation_sync/requirements.txt'
+    ORACLE_DB_TABLE = 'ADMS_CODED_TRANSLATION'
   }
 
   stages {
@@ -71,15 +71,317 @@ pipeline {
 
           withCredentials(creds) {
             sh '''#!/usr/bin/env bash
-              set -euo pipefail
-              python3 "$SYNC_SCRIPT" \
-                --xml-file "$TARGET_FILE" \
-                --create-table-if-missing \
-                --since-commit "${GIT_PREVIOUS_SUCCESSFUL_COMMIT:-}" \
-                --current-commit "${GIT_COMMIT:-}" \
-                --repo-dir . \
-                --source-commit "${GIT_COMMIT:-}"
-            '''
+set -euo pipefail
+python3 -c 'import sys, textwrap; exec(textwrap.dedent(sys.stdin.read()))' <<'PY'
+      import logging
+      import os
+      import re
+      import subprocess
+      import sys
+      import xml.etree.ElementTree as ET
+      from dataclasses import dataclass
+      from pathlib import Path
+
+      try:
+        import oracledb
+      except ImportError:
+        print("ERROR: Python package 'oracledb' is not installed. Install requirements first.", file=sys.stderr)
+        raise SystemExit(2)
+
+      logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
+      LOGGER = logging.getLogger("coded_translation_inline_sync")
+
+
+      @dataclass(frozen=True)
+      class TranslationRow:
+        translation_name: str
+        entry_key_text: str
+        short_name: str | None
+        text_value: str | None
+        text1_value: str | None
+        image_name: str | None
+        default_image_name: str | None
+        read_only_value: str
+
+
+      def text_or_none(element):
+        if element is None:
+          return None
+        value = (element.text or "").strip()
+        return value or None
+
+
+      def validate_table_name(table_name):
+        pattern = r"^[A-Za-z][A-Za-z0-9_$#]*(\.[A-Za-z][A-Za-z0-9_$#]*)?$"
+        if not re.fullmatch(pattern, table_name):
+          raise ValueError(
+            "Invalid table name. Use unquoted Oracle identifiers, optionally schema-qualified."
+          )
+        return table_name.upper()
+
+
+      def parse_xml(xml_path):
+        tree = ET.parse(xml_path)
+        root = tree.getroot()
+        ns = {"ct": root.tag.split("}")[0].strip("{")} if "}" in root.tag else {"ct": ""}
+
+        rows = []
+        for trans in root.findall(".//ct:CodedTranslation", ns):
+          name = text_or_none(trans.find("ct:Name", ns))
+          if not name:
+            raise ValueError("A CodedTranslation node is missing Name")
+
+          default_image_name = text_or_none(trans.find("ct:DefaultImageName", ns))
+          read_only_text = (text_or_none(trans.find("ct:ReadOnly", ns)) or "false").lower()
+
+          for entry in trans.findall("ct:Entries/ct:CodedTranslationEntry", ns):
+            key_text = text_or_none(entry.find("ct:Key", ns))
+            if key_text is None:
+              raise ValueError(f"Translation '{name}' has an entry with no Key")
+
+            rows.append(
+              TranslationRow(
+                translation_name=name,
+                entry_key_text=key_text,
+                short_name=text_or_none(entry.find("ct:ShortName", ns)),
+                text_value=text_or_none(entry.find("ct:Text", ns)),
+                text1_value=text_or_none(entry.find("ct:Text1", ns)),
+                image_name=text_or_none(entry.find("ct:ImageName", ns)),
+                default_image_name=default_image_name,
+                read_only_value=read_only_text,
+              )
+            )
+
+        if not rows:
+          raise ValueError("No translation entries found in XML")
+        return rows
+
+
+      def fetch_latest_rows(cursor, table_name):
+        select_sql = """
+        SELECT NAME,
+             "KEY" AS KEY_TEXT,
+             SHORTNAME,
+             "TEXT" AS TEXT_VALUE,
+             TEXT1,
+             IMAGENAME,
+             DEFAULTIMAGENAME,
+             READONLY
+          FROM (
+          SELECT NAME,
+               "KEY",
+               SHORTNAME,
+               "TEXT",
+               TEXT1,
+               IMAGENAME,
+               DEFAULTIMAGENAME,
+               READONLY,
+               ROW_NUMBER() OVER (
+               PARTITION BY NAME, "KEY"
+               ORDER BY DATEADDED DESC, ROWID DESC
+               ) AS rn
+            FROM {table_name}
+          )
+         WHERE rn = 1
+        """.format(table_name=table_name)
+
+        cursor.execute(select_sql)
+        latest = {}
+        for (
+          translation_name,
+          entry_key_text,
+          short_name,
+          text_value,
+          text1_value,
+          image_name,
+          default_image_name,
+          read_only_value,
+        ) in cursor:
+          latest[(translation_name, entry_key_text)] = TranslationRow(
+            translation_name=translation_name,
+            entry_key_text=entry_key_text,
+            short_name=short_name,
+            text_value=text_value,
+            text1_value=text1_value,
+            image_name=image_name,
+            default_image_name=default_image_name,
+            read_only_value=(read_only_value or "").lower(),
+          )
+        return latest
+
+
+      def row_changed(new_row, old_row):
+        return (
+          new_row.short_name != old_row.short_name
+          or new_row.text_value != old_row.text_value
+          or new_row.text1_value != old_row.text1_value
+          or new_row.image_name != old_row.image_name
+          or new_row.default_image_name != old_row.default_image_name
+          or new_row.read_only_value != old_row.read_only_value
+        )
+
+
+      def changed_rows_only(rows, latest_rows):
+        changed = []
+        for row in rows:
+          key = (row.translation_name, row.entry_key_text)
+          old_row = latest_rows.get(key)
+          if old_row is None or row_changed(row, old_row):
+            changed.append(row)
+        return changed
+
+
+      def insert_rows(cursor, rows, table_name):
+        insert_sql = """
+        INSERT INTO {table_name} (
+          NAME,
+          DEFAULTIMAGENAME,
+          READONLY,
+          "KEY",
+          IMAGENAME,
+          SHORTNAME,
+          "TEXT",
+          TEXT1,
+          DATEADDED
+        ) VALUES (
+          :translation_name,
+          :default_image_name,
+          :read_only_value,
+          :entry_key_text,
+          :image_name,
+          :short_name,
+          :text_value,
+          :text1_value,
+          SYSTIMESTAMP
+        )
+        """.format(table_name=table_name)
+        cursor.executemany(
+          insert_sql,
+          [
+            {
+              "translation_name": r.translation_name,
+              "entry_key_text": r.entry_key_text,
+              "short_name": r.short_name,
+              "text_value": r.text_value,
+              "text1_value": r.text1_value,
+              "image_name": r.image_name,
+              "default_image_name": r.default_image_name,
+              "read_only_value": r.read_only_value,
+            }
+            for r in rows
+          ],
+        )
+
+
+      def xml_changed_between_commits(repo_dir, xml_path, since_commit, current_commit):
+        repo_dir = repo_dir.resolve()
+        xml_path = xml_path.resolve()
+        rel_xml = str(xml_path.relative_to(repo_dir))
+        cmd = [
+          "git",
+          "-C",
+          str(repo_dir),
+          "diff",
+          "--quiet",
+          since_commit,
+          current_commit,
+          "--",
+          rel_xml,
+        ]
+        result = subprocess.run(cmd, capture_output=True, text=True, check=False)
+        if result.returncode == 0:
+          return False
+        if result.returncode == 1:
+          return True
+        raise RuntimeError(
+          f"git diff failed (exit={result.returncode}) for {since_commit}..{current_commit}: {(result.stderr or '').strip()}"
+        )
+
+
+      def main():
+        xml_file = os.environ.get("TARGET_FILE")
+        source_commit = os.environ.get("GIT_COMMIT")
+        since_commit = os.environ.get("GIT_PREVIOUS_SUCCESSFUL_COMMIT")
+        current_commit = os.environ.get("GIT_COMMIT")
+        table_name = validate_table_name(os.environ.get("ORACLE_DB_TABLE", "ADMS_CODED_TRANSLATION"))
+
+        if not xml_file:
+          LOGGER.error("TARGET_FILE is required")
+          return 2
+
+        xml_path = Path(xml_file)
+        if not xml_path.exists():
+          LOGGER.error("XML file not found: %s", xml_path)
+          return 2
+
+        if since_commit and current_commit:
+          try:
+            if not xml_changed_between_commits(Path("."), xml_path, since_commit, current_commit):
+              LOGGER.info(
+                "No XML changes detected between commits %s..%s; skipping sync.",
+                since_commit,
+                current_commit,
+              )
+              return 0
+          except Exception:
+            LOGGER.exception("Failed git diff gate")
+            return 2
+
+        try:
+          rows = parse_xml(xml_path)
+        except Exception:
+          LOGGER.exception("Failed to parse XML")
+          return 2
+
+        db_targets = [
+          ("DB1", os.environ.get("ORACLE_DB_USER"), os.environ.get("ORACLE_DB_PASSWORD"), os.environ.get("ORACLE_DB_DSN")),
+          ("DB2", os.environ.get("ORACLE_DB2_USER"), os.environ.get("ORACLE_DB2_PASSWORD"), os.environ.get("ORACLE_DB2_DSN")),
+        ]
+
+        results = []
+        for name, user, password, dsn in db_targets:
+          if not user or not password or not dsn:
+            if name == "DB1":
+              LOGGER.error("Primary DB config missing, aborting.")
+              return 2
+            LOGGER.warning("Secondary DB config missing, skipping.")
+            results.append((name, False, 0))
+            continue
+
+          try:
+            with oracledb.connect(user=user, password=password, dsn=dsn) as conn:
+              with conn.cursor() as cursor:
+                rows_to_insert = changed_rows_only(rows, fetch_latest_rows(cursor, table_name))
+                if rows_to_insert:
+                  insert_rows(cursor, rows_to_insert, table_name)
+              conn.commit()
+            results.append((name, True, len(rows_to_insert)))
+          except Exception:
+            LOGGER.exception("%s sync failed", name)
+            results.append((name, False, 0))
+
+        ok_count = sum(1 for _, ok, _ in results if ok)
+        if ok_count == 0:
+          LOGGER.error("Sync failed: could not write to either DB.")
+          return 1
+
+        inserted_db1 = results[0][2] if results else 0
+        inserted_db2 = results[1][2] if len(results) > 1 else 0
+        LOGGER.info(
+          "Sync complete: parsed=%s rows_added_total=%s inserted_db1=%s inserted_db2=%s xml=%s source_commit=%s",
+          len(rows),
+          inserted_db1 + inserted_db2,
+          inserted_db1,
+          inserted_db2,
+          xml_path,
+          source_commit or "n/a",
+        )
+        return 0
+
+
+      raise SystemExit(main())
+PY
+'''
           }
         }
       }
